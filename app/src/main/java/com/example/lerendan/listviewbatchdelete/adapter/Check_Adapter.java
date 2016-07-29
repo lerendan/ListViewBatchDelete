@@ -54,8 +54,6 @@ public class Check_Adapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.lv_check_item, null);
             viewHolder.iv_click = (ImageView) convertView.findViewById(R.id.iv_click);
             viewHolder.tv_id = (TextView) convertView.findViewById(R.id.tv_id);
-
-
             viewHolder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
 
             convertView.setTag(viewHolder);

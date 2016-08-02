@@ -1,11 +1,11 @@
 package com.example.lerendan.listviewbatchdelete.ui;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         mListview = (ListView) findViewById(R.id.lv);
         btn_confirm = (Button) findViewById(R.id.confirm);
+        btn_confirm.setEnabled(false);
     }
 
     private void initData() {
@@ -92,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.confirm:
                 if (n != 0) {
-                    dialog();//调用确认对话框
+                    showDialog();//调用确认对话框
                 } else {
-                    Toast.makeText(this, "未点击", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "未选择", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 确认删除的对话框
      */
-    public void dialog() {
+    public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("确认删除吗？");
         builder.setTitle("提示");
@@ -144,6 +145,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAdapter.notifyDataSetChanged();
         mListview.setSelection(0);
         n = 0;
+        btn_confirm.setEnabled(false);
+        btn_confirm.setText("确认（" + n + "）");
+    }
+
+    /**
+     * Listview Item全选
+     */
+    public void selectAllItem(){
+        Iterator<Check> iterator = mData.iterator();
+        while (iterator.hasNext()) {
+            Check check = iterator.next();
+            check.setChecked(true);
+        }
+        mAdapter.setChecks(mData);
+        mAdapter.notifyDataSetChanged();
+        n=mData.size();
+        btn_confirm.setEnabled(true);
         btn_confirm.setText("确认（" + n + "）");
     }
 
@@ -163,8 +181,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 n++;
                 btn_confirm.setText("确认（" + n + "）");
             }
+            if(n!=0){
+                btn_confirm.setEnabled(true);
+            }else {
+                btn_confirm.setEnabled(false);
+            }
             mAdapter.setChecks(mData);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        int group1 = 1;
+        menu.add(group1, 1, 1, "全选");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                selectAllItem();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

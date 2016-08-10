@@ -10,6 +10,6 @@
 比如，在menu里加一个全选的功能；把标识item被选中的imageview换成checkbox；加入删除的动画。   
 
      
-    
+8.10更新，加入menu全选    
 
 lerendan 7-27
